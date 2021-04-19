@@ -1,0 +1,1 @@
+export type SlideShowItemTemplateType = 'localization';
