@@ -2,7 +2,8 @@ import React, { useRef } from 'react';
 import { useThree, useFrame } from 'react-three-fiber';
 import { PointerLockControls } from '@react-three/drei';
 import * as THREE from 'three';
-import useKeyboardControls from '../../../hooks/useKeyboardControls';
+import useMoveControls from './hooks/useMoveControls';
+import { initRotationMatrices } from './PointerLockControlsHelper';
 
 const raycaster = new THREE.Raycaster();
 
@@ -27,36 +28,7 @@ function onMouseMove(event: any) {
 const PointerLockControlsImpl = () => {
   const { camera, gl, clock, scene } = useThree();
   const controlRef = useRef<PointerLockControls>(null);
-  const { forward, backward, left, right } = useKeyboardControls();
-
-  // for (
-  //   var vertexIndex = 0;
-  //   vertexIndex < mesh1.geometry.vertices.length;
-  //   vertexIndex++
-  // ) {
-  //   // 顶点原始坐标
-  //   var localVertex = mesh1.geometry.vertices[vertexIndex].clone();
-  //   // 顶点经过变换后的坐标
-  //   var globalVertex = localVertex.applyMatrix4(mesh1.matrix);
-  //   // 获得由中心指向顶点的向量
-  //   var directionVector = globalVertex.sub(mesh1.position);
-  //   // 将方向向量初始化,并发射光线
-  //   var ray = new THREE.Raycaster(
-  //     originPoint,
-  //     directionVector.clone().normalize(),
-  //   );
-  //   // 检测射线与多个物体的相交情况
-  //   // 如果为true，它还检查所有后代。否则只检查该对象本身。缺省值为false
-  //   var collisionResults = ray.intersectObjects([mesh2], true);
-  //   // 如果返回结果不为空，且交点与射线起点的距离小于物体中心至顶点的距离，则发生了碰撞
-  //   if (
-  //     collisionResults.length > 0 &&
-  //     collisionResults[0].distance < directionVector.length()
-  //   ) {
-  //     crash = true; // crash 是一个标记变量
-  //     alert('发生了碰撞');
-  //   }
-  // }
+  const [move, setMove] = useMoveControls();
 
   useFrame(() => {
     // const delta = clock.getDelta();
@@ -64,32 +36,76 @@ const PointerLockControlsImpl = () => {
     const elapsed = clock.getElapsedTime();
     const delta = elapsed - lastTime;
 
+    const hitTest = () => {
+      camera.getWorldDirection(mouseDirection);
+      // var cameraDirection = self.getDirection2(new THREE.Vector3(0, 0, 0)).clone();
+      // console.log(cameraDirection);
+
+      const rotationMatrices = initRotationMatrices();
+      rotationMatrices.forEach((rotationMatrix) => {
+        // Applying rotation for each direction:
+        // var direction = mouseDirection.clone();
+        mouseDirection.applyMatrix4(rotationMatrix.value);
+        // console.log(mouseDirection);
+
+        const originPoint = camera.position.clone();
+        const rayCaster = new THREE.Raycaster(originPoint, mouseDirection);
+        const intersects = rayCaster.intersectObject(scene, true);
+        if (intersects.length > 0 && intersects[0].distance < 3) {
+          console.log(rotationMatrix.direction, intersects[0].distance);
+          setMove((prevMove) => ({
+            ...prevMove,
+            [rotationMatrix.direction]: false,
+          }));
+
+          // lockDirectionByIndex(i);
+          // hitObjects.push(intersects[0]);
+          // console.log(intersects[0].object.name, i);
+        }
+      });
+    };
+    hitTest();
+
     // const originPoint = camera.position.clone();
-    // console.log(originPoint);
+    // camera.getWorldDirection(mouseDirection);
+    // const rayCaster = new THREE.Raycaster(
+    //   originPoint,
+    //   mouseDirection.normalize(),
+    // );
+    // const ray = new THREE.Raycaster(originPoint, mouseDirection.normalize());
+    // const collisionResults = ray.intersectObjects(scene.children);
 
-    const originPoint = camera.position.clone();
-    camera.getWorldDirection(mouseDirection);
-    const ray = new THREE.Raycaster(originPoint, mouseDirection.normalize());
-    const collisionResults = ray.intersectObjects(scene.children);
-
-    if (collisionResults.length > 0) {
-      console.log(collisionResults);
-    }
+    // if (collisionResults.length > 0) {
+    //   console.log(collisionResults);
+    // }
 
     if (controlRef.current?.moveForward && controlRef.current?.moveRight) {
-      direction.z = Number(forward) - Number(backward);
-      direction.x = Number(right) - Number(left);
-      direction.normalize(); // this ensures consistent movements in all directions
+      // direction.x = Number(move.right) - Number(move.left);
+      // direction.z = Number(move.forward) - Number(move.backward);
+      // direction.normalize(); // this ensures consistent movements in all directions
 
-      velocity.z -= velocity.z * 100.0 * delta;
-      velocity.x -= velocity.x * 100.0 * delta;
-      if (forward || backward) velocity.z -= direction.z * 400.0 * delta;
-      if (left || right) velocity.x -= direction.x * 400.0 * delta;
+      velocity.x += -1 * velocity.x * 10 * delta;
+      velocity.z += -1 * velocity.z * 10 * delta;
+      // console.log('x', velocity.x, move.left);
+      console.log('z', velocity.z, move.forward);
+
+      if (move.left) velocity.x -= 35 * delta;
+      if (move.right) velocity.x += 35 * delta;
+      if (move.forward) velocity.z -= 35 * delta;
+      if (move.backward) velocity.z += 35 * delta;
+
+      // console.log(move.forward, velocity.z);
+      // camera.translateX(velocity.x);
+      // camera.translateZ(velocity.z);
+
+      // if (move.forward || move.backward)
+      //   velocity.z -= direction.z * 400.0 * delta;
+      // if (move.left || move.right) velocity.x -= direction.x * 400.0 * delta;
 
       // console.log(delta);
       // controlRef.current.moveForward(direction.z * delta * 0.01);
       controlRef.current.moveForward(-velocity.z * delta);
-      controlRef.current.moveRight(-velocity.x * delta);
+      controlRef.current.moveRight(velocity.x * delta);
 
       // controlRef.current.moveForward(delta);
 

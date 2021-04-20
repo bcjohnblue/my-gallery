@@ -60,5 +60,6 @@ module.exports = {
     'consistent-return': OFF,
     'no-unused-expressions': OFF,
     '@typescript-eslint/no-unused-expressions': OFF,
+    'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
   },
 };

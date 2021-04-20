@@ -1,32 +1,25 @@
 import { useEffect, useState } from 'react';
+import { Keyboard, Direction } from '../PointerLockTypes';
 
-interface Keyboard {
-  KeyW: 'forward';
-  KeyS: 'backward';
-  KeyA: 'left';
-  KeyD: 'right';
-}
-
-const mapKeysToDirection = (key: keyof Keyboard) => {
+const mapKeyToDirection = (key: keyof Keyboard) => {
   const keyboard = {
     KeyW: 'forward',
     KeyS: 'backward',
     KeyA: 'left',
     KeyD: 'right',
-    // Space: 'jump',
-    // ShiftLeft: 'speed',
   };
   return keyboard[key];
 };
 
-const useKeyboardControls = () => {
-  const [movement, setMovement] = useState({
+const useMoveControls = (): [
+  Direction,
+  React.Dispatch<React.SetStateAction<Direction>>,
+] => {
+  const [move, setMove] = useState<Direction>({
     forward: false,
     backward: false,
     left: false,
     right: false,
-    // jump: false,
-    speed: 15,
   });
 
   useEffect(() => {
@@ -38,9 +31,9 @@ const useKeyboardControls = () => {
         case 'KeyD': // right
           // case 'Space': // jump
           // const key = e.code as keyof Keyboard;
-          setMovement((m) => ({
+          setMove((m) => ({
             ...m,
-            [mapKeysToDirection(e.code as keyof Keyboard)]: true,
+            [mapKeyToDirection(e.code as keyof Keyboard)]: true,
           }));
           break;
         // case 'ShiftLeft':
@@ -60,9 +53,9 @@ const useKeyboardControls = () => {
         case 'KeyS': // backwards
         case 'KeyD': // right
         case 'Space': // jump
-          setMovement((m) => ({
+          setMove((m) => ({
             ...m,
-            [mapKeysToDirection(e.code as keyof Keyboard)]: false,
+            [mapKeyToDirection(e.code as keyof Keyboard)]: false,
           }));
           break;
         // case 'ShiftLeft':
@@ -85,7 +78,7 @@ const useKeyboardControls = () => {
     };
   }, []);
 
-  return movement;
+  return [move, setMove];
 };
 
-export default useKeyboardControls;
+export default useMoveControls;
