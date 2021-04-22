@@ -8,12 +8,10 @@ import { initRotationMatrices } from './PointerLockControlsHelper';
 const raycaster = new THREE.Raycaster();
 
 const velocity = new THREE.Vector3();
-const direction = new THREE.Vector3();
+// const direction = new THREE.Vector3();
 
-const speed = 0.1;
+const speed = 4;
 let lastTime = 0;
-
-const mouseDirection = new THREE.Vector3();
 
 const mouse = new THREE.Vector2();
 
@@ -37,22 +35,32 @@ const PointerLockControlsImpl = () => {
     const delta = elapsed - lastTime;
 
     const hitTest = () => {
-      camera.getWorldDirection(mouseDirection);
+      const cameraDirection = new THREE.Vector3();
+      camera.getWorldDirection(cameraDirection);
+      // console.log('rotation', camera.rotation);
       // var cameraDirection = self.getDirection2(new THREE.Vector3(0, 0, 0)).clone();
-      // console.log(cameraDirection);
+      // console.log(mouseDirection);
 
       const rotationMatrices = initRotationMatrices();
       rotationMatrices.forEach((rotationMatrix) => {
         // Applying rotation for each direction:
-        // var direction = mouseDirection.clone();
-        mouseDirection.applyMatrix4(rotationMatrix.value);
-        // console.log(mouseDirection);
+        const cameraDirectionClone = cameraDirection.clone();
+        cameraDirectionClone.applyMatrix4(rotationMatrix.value);
+        // console.log(rotationMatrix.direction, direction);
 
-        const originPoint = camera.position.clone();
-        const rayCaster = new THREE.Raycaster(originPoint, mouseDirection);
+        const cameraPosition = camera.position.clone();
+        // originPoint.applyEuler(camera.rotation);
+        const rayCaster = new THREE.Raycaster(
+          cameraPosition,
+          cameraDirectionClone,
+        );
+        // if (rotationMatrix.direction === 'left') {
+        //   console.log('originPoint', originPoint);
+        //   console.log('mouseDirection', mouseDirection);
+        // }
         const intersects = rayCaster.intersectObject(scene, true);
         if (intersects.length > 0 && intersects[0].distance < 3) {
-          console.log(rotationMatrix.direction, intersects[0].distance);
+          // console.log(rotationMatrix.direction, intersects[0].distance);
           setMove((prevMove) => ({
             ...prevMove,
             [rotationMatrix.direction]: false,
@@ -62,6 +70,9 @@ const PointerLockControlsImpl = () => {
           // hitObjects.push(intersects[0]);
           // console.log(intersects[0].object.name, i);
         }
+        // if (rotationMatrix.direction === 'left') {
+        //   console.log(rotationMatrix.direction, intersects);
+        // }
       });
     };
     hitTest();
@@ -84,15 +95,15 @@ const PointerLockControlsImpl = () => {
       // direction.z = Number(move.forward) - Number(move.backward);
       // direction.normalize(); // this ensures consistent movements in all directions
 
-      velocity.x += -1 * velocity.x * 10 * delta;
-      velocity.z += -1 * velocity.z * 10 * delta;
+      velocity.x += -1 * velocity.x * 0.75;
+      velocity.z += -1 * velocity.z * 0.75;
       // console.log('x', velocity.x, move.left);
       console.log('z', velocity.z, move.forward);
 
-      if (move.left) velocity.x -= 35 * delta;
-      if (move.right) velocity.x += 35 * delta;
-      if (move.forward) velocity.z -= 35 * delta;
-      if (move.backward) velocity.z += 35 * delta;
+      if (move.left) velocity.x -= 1 * speed;
+      if (move.right) velocity.x += 1 * speed;
+      if (move.forward) velocity.z -= 1 * speed;
+      if (move.backward) velocity.z += 1 * speed;
 
       // console.log(move.forward, velocity.z);
       // camera.translateX(velocity.x);
@@ -106,6 +117,10 @@ const PointerLockControlsImpl = () => {
       // controlRef.current.moveForward(direction.z * delta * 0.01);
       controlRef.current.moveForward(-velocity.z * delta);
       controlRef.current.moveRight(velocity.x * delta);
+
+      if (move.forward) {
+        console.log('speed', -velocity.z * delta);
+      }
 
       // controlRef.current.moveForward(delta);
 

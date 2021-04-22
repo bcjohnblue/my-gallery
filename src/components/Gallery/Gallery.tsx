@@ -48,7 +48,7 @@ export default ((props) => {
     },
     onCreated: ({ camera }) => {
       camera.lookAt(-1, 2, -3);
-      console.log(camera);
+      // console.log(camera);
     },
   };
 
