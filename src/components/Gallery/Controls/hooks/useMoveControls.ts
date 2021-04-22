@@ -1,71 +1,63 @@
-import { useEffect, useState } from 'react';
-import { Keyboard, Direction } from '../PointerLockTypes';
+import { useEffect, useRef, useCallback } from 'react';
+import {
+  Direction,
+  DirectionKeys,
+  Keyboard,
+  KeyboardKeys,
+} from '../PointerLockTypes';
 
-const mapKeyToDirection = (key: keyof Keyboard) => {
-  const keyboard = {
+const keyboardKeys: KeyboardKeys[] = ['KeyW', 'KeyS', 'KeyA', 'KeyD'];
+
+const mapKeyToDirection = (key: KeyboardKeys): DirectionKeys => {
+  const keyboard: Keyboard = {
     KeyW: 'forward',
     KeyS: 'backward',
     KeyA: 'left',
     KeyD: 'right',
   };
+
   return keyboard[key];
 };
 
-const useMoveControls = (): [
-  Direction,
-  React.Dispatch<React.SetStateAction<Direction>>,
-] => {
-  const [move, setMove] = useState<Direction>({
-    forward: false,
-    backward: false,
-    left: false,
-    right: false,
-  });
+const initialValue: Direction = {
+  forward: false,
+  backward: false,
+  left: false,
+  right: false,
+};
+
+interface SetMoveCallback {
+  (args: { direction: DirectionKeys; value: boolean }): void;
+}
+
+type UseMoveControls = [React.MutableRefObject<Direction>, SetMoveCallback];
+const useMoveControls = (): UseMoveControls => {
+  const move = useRef(initialValue);
+  const setMove = useCallback<SetMoveCallback>(({ direction, value }) => {
+    move.current = {
+      ...move.current,
+      [direction]: value,
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case 'KeyW': // forward
-        case 'KeyA': // left
-        case 'KeyS': // backwards
-        case 'KeyD': // right
-          // case 'Space': // jump
-          // const key = e.code as keyof Keyboard;
-          setMove((m) => ({
-            ...m,
-            [mapKeyToDirection(e.code as keyof Keyboard)]: true,
-          }));
-          break;
-        // case 'ShiftLeft':
-        //   setMovement((m) => ({
-        //     ...m,
-        //     [mapKeysToDirection(e.code)]: 30,
-        //   }));
-        default:
-          break;
+      const key = e.code as KeyboardKeys;
+      if (keyboardKeys.includes(key)) {
+        setMove({
+          direction: mapKeyToDirection(key),
+          value: true,
+        });
       }
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
-      switch (e.code) {
-        case 'KeyW': // forward
-        case 'KeyA': // left
-        case 'KeyS': // backwards
-        case 'KeyD': // right
-        case 'Space': // jump
-          setMove((m) => ({
-            ...m,
-            [mapKeyToDirection(e.code as keyof Keyboard)]: false,
-          }));
-          break;
-        // case 'ShiftLeft':
-        //   setMovement((m) => ({
-        //     ...m,
-        //     [mapKeysToDirection(e.code)]: 15,
-        //   }));
-
-        default:
-          break;
+      const key = e.code as KeyboardKeys;
+      if (keyboardKeys.includes(key)) {
+        setMove({
+          direction: mapKeyToDirection(key),
+          value: false,
+        });
       }
     };
 
@@ -76,7 +68,7 @@ const useMoveControls = (): [
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keyup', handleKeyUp);
     };
-  }, []);
+  }, [setMove]);
 
   return [move, setMove];
 };

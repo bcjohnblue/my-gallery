@@ -61,18 +61,27 @@ const PointerLockControlsImpl = () => {
         const intersects = rayCaster.intersectObject(scene, true);
         if (intersects.length > 0 && intersects[0].distance < 3) {
           // console.log(rotationMatrix.direction, intersects[0].distance);
-          setMove((prevMove) => ({
-            ...prevMove,
-            [rotationMatrix.direction]: false,
-          }));
+
+          setMove({
+            direction: rotationMatrix.direction,
+            value: false,
+          });
+          // setMove((prevMove) => {
+          //   console.log('prevMove', prevMove);
+
+          //   return {
+          //     ...prevMove,
+          //     [rotationMatrix.direction]: false,
+          //   };
+          // });
 
           // lockDirectionByIndex(i);
           // hitObjects.push(intersects[0]);
           // console.log(intersects[0].object.name, i);
         }
-        // if (rotationMatrix.direction === 'left') {
-        //   console.log(rotationMatrix.direction, intersects);
-        // }
+        if (rotationMatrix.direction === 'forward') {
+          console.log(rotationMatrix.direction, intersects);
+        }
       });
     };
     hitTest();
@@ -98,12 +107,12 @@ const PointerLockControlsImpl = () => {
       velocity.x += -1 * velocity.x * 0.75;
       velocity.z += -1 * velocity.z * 0.75;
       // console.log('x', velocity.x, move.left);
-      console.log('z', velocity.z, move.forward);
+      console.log('z', velocity.z, move.current.forward);
 
-      if (move.left) velocity.x -= 1 * speed;
-      if (move.right) velocity.x += 1 * speed;
-      if (move.forward) velocity.z -= 1 * speed;
-      if (move.backward) velocity.z += 1 * speed;
+      if (move.current.left) velocity.x -= 1 * speed;
+      if (move.current.right) velocity.x += 1 * speed;
+      if (move.current.forward) velocity.z -= 1 * speed;
+      if (move.current.backward) velocity.z += 1 * speed;
 
       // console.log(move.forward, velocity.z);
       // camera.translateX(velocity.x);
@@ -118,7 +127,7 @@ const PointerLockControlsImpl = () => {
       controlRef.current.moveForward(-velocity.z * delta);
       controlRef.current.moveRight(velocity.x * delta);
 
-      if (move.forward) {
+      if (move.current.forward) {
         console.log('speed', -velocity.z * delta);
       }
 
