@@ -1,9 +1,11 @@
-import { Plane, Text, useTexture } from '@react-three/drei';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { Plane, Text, ShapeProps, useTexture } from '@react-three/drei';
 import DDT_HOME_IMAGE from '@/assets/ddt_home.png';
 import * as THREE from 'three';
 import { useLoader, useThree } from 'react-three-fiber';
 import { Mesh } from 'three';
+import { useRecoilValue } from 'recoil';
+import { controlState } from '@/store/atoms';
 
 const COLOR = 0x999;
 
@@ -12,6 +14,8 @@ type Props = {
 };
 
 const Poster: React.FC<Props> = (props) => {
+  const control = useRecoilValue(controlState);
+  const dadatongRef = useRef<ShapeProps<typeof Plane>>();
   // const { gl } = useThree();
   const ddtHomeImg = useTexture(DDT_HOME_IMAGE);
   // gl.outputEncoding = THREE.sRGBEncoding;
@@ -54,16 +58,30 @@ const Poster: React.FC<Props> = (props) => {
   // ];
 
   const onClick = () => {
-    props.setIsSlideShow(true);
+    // props.setIsSlideShow(true);
     console.log('click');
+    // control?.lock && control.lock();
+    // control?.unlock && control.unlock();
   };
+
+  useEffect(() => {
+    if (!dadatongRef.current) return;
+
+    (dadatongRef.current as any).click = () => {
+      console.log('onclick');
+    };
+    console.log(dadatongRef.current);
+  }, [dadatongRef]);
 
   return (
     <>
-      <mesh position={[0, 2, -3.51]}>
+      <mesh position={[0, 2, -3.51]} name="test">
         <boxGeometry args={[5, 4, 1]} />
       </mesh>
-      <mesh position={[0, 2, -3]} onClick={onClick}>
+      <mesh position={[0, 2, -3]} name="dadatong" ref={dadatongRef}>
+        {/* <planeGeometry args={[4.8, 3, 1]} />
+        <meshBasicMaterial map={ddtHomeImg} /> */}
+
         <Plane args={[4.8, 3, 1]}>
           <meshBasicMaterial map={ddtHomeImg} />
         </Plane>

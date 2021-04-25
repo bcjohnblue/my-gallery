@@ -10,11 +10,14 @@ import { Props as CanvasProps } from '@react-three/fiber/dist/declarations/src/w
 import { Physics } from '@react-three/cannon';
 import styled from 'styled-components';
 import { Vector3 } from 'three';
+import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from 'recoil';
 import Ground from './Ground/Ground';
 import Scene from './Scene/Scene';
 import Building from './Building/Building';
 import Lights from './Lights/Lights';
 import Controls from './Controls/PointerLockControls/PointerLockControls';
+import MouseEvent from './Mouse/MouseEvent/MouseEvent';
+import MouseIcon from './Mouse/MouseIcon/MouseIcon';
 
 const Styled = {
   Container: styled.div`
@@ -30,6 +33,8 @@ type Props = {
 };
 
 export default ((props) => {
+  const RecoilBridge = useRecoilBridgeAcrossReactRoots_UNSTABLE();
+
   const canvasProps: Omit<CanvasProps, 'children'> = {
     className: 'full-width',
     gl: {
@@ -56,17 +61,21 @@ export default ((props) => {
   return (
     <Styled.Container>
       <Canvas {...canvasProps}>
-        <Lights />
-        <Scene>
-          <Controls />
-          <Building setIsSlideShow={props.setIsSlideShow} />
-          <Physics>
-            <Suspense fallback={null}>
-              <Ground />
-            </Suspense>
-          </Physics>
-        </Scene>
+        <RecoilBridge>
+          <Lights />
+          <MouseEvent />
+          <Scene>
+            <Controls />
+            <Building setIsSlideShow={props.setIsSlideShow} />
+            <Physics>
+              <Suspense fallback={null}>
+                <Ground />
+              </Suspense>
+            </Physics>
+          </Scene>
+        </RecoilBridge>
       </Canvas>
+      <MouseIcon />
     </Styled.Container>
   );
 }) as React.FC<Props>;

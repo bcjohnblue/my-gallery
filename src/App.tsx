@@ -6,6 +6,8 @@ import Gallery from '@/components/Gallery/Gallery';
 /* Styles */
 import '@/styles/index.css';
 
+import { RecoilRoot } from 'recoil';
+
 const Styled = {
   Container: styled.div`
     display: flex;
@@ -21,11 +23,13 @@ export default (() => {
   const [isSlideShow, setIsSlideShow] = useState(false);
 
   return (
-    <Styled.Container>
-      <Gallery setIsSlideShow={setIsSlideShow} />
-      {isSlideShow ? (
-        <SlideShow isShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
-      ) : null}
-    </Styled.Container>
+    <RecoilRoot>
+      <Styled.Container>
+        <Gallery setIsSlideShow={setIsSlideShow} />
+        {isSlideShow ? (
+          <SlideShow isShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
+        ) : null}
+      </Styled.Container>
+    </RecoilRoot>
   );
 }) as React.FC<Props>;

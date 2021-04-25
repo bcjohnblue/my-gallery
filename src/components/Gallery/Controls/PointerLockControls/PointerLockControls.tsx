@@ -1,7 +1,9 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useThree, useFrame } from 'react-three-fiber';
 import { PointerLockControls } from '@react-three/drei';
 import * as THREE from 'three';
+import { useSetRecoilState, useRecoilState } from 'recoil';
+import { controlState } from '@/store/atoms';
 import useMoveControls from './hooks/useMoveControls';
 import { initRotationMatrices } from './PointerLockControlsHelper';
 
@@ -14,6 +16,13 @@ const PointerLockControlsImpl: React.FC = () => {
   const { camera, gl, clock, scene } = useThree();
   const controlRef = useRef<PointerLockControls>(null);
   const [move, setMove] = useMoveControls();
+
+  const [control, setControl] = useRecoilState(controlState);
+  // const setControl = useSetRecoilState(controlState);
+  useEffect(() => {
+    if (!controlRef.current) return;
+    setControl(controlRef.current);
+  }, [controlRef, setControl]);
 
   useFrame(() => {
     // const delta = clock.getDelta();
