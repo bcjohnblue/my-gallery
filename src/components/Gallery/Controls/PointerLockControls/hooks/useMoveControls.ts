@@ -4,7 +4,7 @@ import {
   DirectionKeys,
   Keyboard,
   KeyboardKeys,
-} from '../PointerLockTypes';
+} from '../PointerLockControlsTypes';
 
 const keyboardKeys: KeyboardKeys[] = ['KeyW', 'KeyS', 'KeyA', 'KeyD'];
 

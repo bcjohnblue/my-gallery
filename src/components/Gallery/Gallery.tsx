@@ -5,7 +5,8 @@ import React, {
   useRef,
   useState,
 } from 'react';
-import { Canvas, ContainerProps, useThree } from 'react-three-fiber';
+import { Canvas } from '@react-three/fiber';
+import { Props as CanvasProps } from '@react-three/fiber/dist/declarations/src/web/Canvas';
 import { Physics } from '@react-three/cannon';
 import styled from 'styled-components';
 import { Vector3 } from 'three';
@@ -13,7 +14,7 @@ import Ground from './Ground/Ground';
 import Scene from './Scene/Scene';
 import Building from './Building/Building';
 import Lights from './Lights/Lights';
-import Controls from './Controls/Controls';
+import Controls from './Controls/PointerLockControls/PointerLockControls';
 
 const Styled = {
   Container: styled.div`
@@ -29,12 +30,12 @@ type Props = {
 };
 
 export default ((props) => {
-  const canvasProps: Omit<ContainerProps, 'children'> = {
+  const canvasProps: Omit<CanvasProps, 'children'> = {
     className: 'full-width',
     gl: {
       antialias: true,
     },
-    pixelRatio: devicePixelRatio,
+    dpr: devicePixelRatio,
     camera: {
       fov: 60,
       // aspect: window.innerWidth / window.innerHeight,
