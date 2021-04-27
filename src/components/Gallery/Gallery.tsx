@@ -1,23 +1,17 @@
-import React, {
-  Suspense,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { Suspense } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Props as CanvasProps } from '@react-three/fiber/dist/declarations/src/web/Canvas';
 import { Physics } from '@react-three/cannon';
 import styled from 'styled-components';
-import { Vector3 } from 'three';
 import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from 'recoil';
+
 import Ground from './Ground/Ground';
 import Scene from './Scene/Scene';
 import Building from './Building/Building';
 import Lights from './Lights/Lights';
 import Controls from './Controls/PointerLockControls/PointerLockControls';
-import MouseEvent from './Mouse/MouseEvent/MouseEvent';
 import MouseIcon from './Mouse/MouseIcon/MouseIcon';
+import Loading from './Loading/Loading';
 
 const Styled = {
   Container: styled.div`
@@ -63,7 +57,6 @@ export default ((props) => {
       <Canvas {...canvasProps}>
         <RecoilBridge>
           <Lights />
-          <MouseEvent />
           <Scene>
             <Controls />
             <Building setIsSlideShow={props.setIsSlideShow} />
@@ -75,6 +68,7 @@ export default ((props) => {
           </Scene>
         </RecoilBridge>
       </Canvas>
+      <Loading />
       <MouseIcon />
     </Styled.Container>
   );

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import SlideShow from '@/components/SlideShow/SlideShow';
+import LandingPage from '@/components/LandingPage/LandingPage';
 import Gallery from '@/components/Gallery/Gallery';
+import SlideShow from '@/components/SlideShow/SlideShow';
 
 /* Styles */
 import '@/styles/index.css';
@@ -26,6 +27,7 @@ export default (() => {
   return (
     <RecoilRoot>
       <Styled.Container>
+        <LandingPage />
         <Gallery setIsSlideShow={setIsSlideShow} />
         <SlideShow isShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
       </Styled.Container>
