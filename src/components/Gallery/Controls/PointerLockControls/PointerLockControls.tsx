@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { useThree, useFrame } from 'react-three-fiber';
 import { PointerLockControls } from '@react-three/drei';
 import * as THREE from 'three';
-import { useSetRecoilState, useRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { controlState } from '@/store/atoms';
 import useMoveControls from './hooks/useMoveControls';
 import { initRotationMatrices } from './PointerLockControlsHelper';
@@ -13,12 +13,11 @@ const DAMPING_FACTOR = 0.75;
 let lastTime = 0;
 
 const PointerLockControlsImpl: React.FC = () => {
-  const { camera, gl, clock, scene } = useThree();
+  const { camera, clock, scene } = useThree();
   const controlRef = useRef<PointerLockControls>(null);
   const [move, setMove] = useMoveControls();
 
-  const [control, setControl] = useRecoilState(controlState);
-  // const setControl = useSetRecoilState(controlState);
+  const setControl = useSetRecoilState(controlState);
   useEffect(() => {
     if (!controlRef.current) return;
     setControl(controlRef.current);
@@ -48,8 +47,7 @@ const PointerLockControlsImpl: React.FC = () => {
         );
         const intersects = rayCaster.intersectObject(scene, true);
         if (intersects.length > 0 && intersects[0].distance < 3) {
-          console.log(rotationMatrix.direction, intersects[0].distance);
-
+          // console.log(rotationMatrix.direction, intersects[0].distance);
           setMove({
             direction: rotationMatrix.direction,
             value: false,

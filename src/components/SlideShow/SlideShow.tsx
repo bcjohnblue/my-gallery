@@ -73,6 +73,7 @@ const SlideShow: React.FC<Props> = (props) => {
   return (
     <Styled.Container
       className={clsx(props.isShow && 'open')}
+      style={{ pointerEvents: props.isShow ? 'auto' : 'none' }}
       onClick={onClick}
     >
       <SlideShowList ref={listRef}>

@@ -6,6 +6,7 @@ import Gallery from '@/components/Gallery/Gallery';
 /* Styles */
 import '@/styles/index.css';
 
+/* State Management */
 import { RecoilRoot } from 'recoil';
 
 const Styled = {
@@ -26,9 +27,7 @@ export default (() => {
     <RecoilRoot>
       <Styled.Container>
         <Gallery setIsSlideShow={setIsSlideShow} />
-        {isSlideShow ? (
-          <SlideShow isShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
-        ) : null}
+        <SlideShow isShow={isSlideShow} setIsSlideShow={setIsSlideShow} />
       </Styled.Container>
     </RecoilRoot>
   );

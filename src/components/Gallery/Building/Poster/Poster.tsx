@@ -21,16 +21,15 @@ const Poster: React.FC<Props> = (props) => {
   const circleRef = useRef<MeshProps>(null);
   useEffect(() => {
     if (!circleRef) return;
-    console.log('Circle useEffect');
 
     const onMouseDown = (event: MouseEvent) => {
       event.preventDefault();
 
-      const object = (circleRef.current as unknown) as THREE.Object3D;
-      const intersects = getInterSectObject(object, camera);
+      const circleObject = (circleRef.current as unknown) as THREE.Object3D;
+      const intersects = getInterSectObject(circleObject, camera);
 
       if (intersects.length > 0) {
-        console.log('intersects', intersects);
+        // console.log('intersects', intersects);
         props.setIsSlideShow(true);
         control?.unlock && control?.unlock();
       }
