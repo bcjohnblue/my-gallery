@@ -2,6 +2,8 @@ import React from 'react';
 import { ReactComponent as LeftArrowSVG } from '@/assets/svg/left-arrow.svg';
 import { ReactComponent as RightArrowSVG } from '@/assets/svg/right-arrow.svg';
 import { ReactComponent as CancelSVG } from '@/assets/svg/cancel.svg';
+import { useRecoilValue } from 'recoil';
+import { controlState } from '@/store/atoms';
 import Styled from './SlideShowNavigatorStyled';
 import { Direction } from '../SlideShowTypes';
 
@@ -15,6 +17,12 @@ const SlideShowNavigator: React.FC<Props> = (props) => {
   const onLeftClick = () => props.onNavigateClick(Direction.Left);
   const onRightClick = () => props.onNavigateClick(Direction.Right);
 
+  const control = useRecoilValue(controlState);
+  const onCloseClick = () => {
+    props.setIsSlideShow(false);
+    control?.lock && control.lock();
+  };
+
   return (
     <nav>
       {props.currentIndex > 0 && (
@@ -27,7 +35,7 @@ const SlideShowNavigator: React.FC<Props> = (props) => {
           <RightArrowSVG />
         </Styled.Right>
       )}
-      <Styled.Close onClick={() => props.setIsSlideShow(false)}>
+      <Styled.Close onClick={onCloseClick}>
         <CancelSVG />
       </Styled.Close>
     </nav>

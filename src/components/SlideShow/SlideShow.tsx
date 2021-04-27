@@ -65,10 +65,15 @@ const SlideShow: React.FC<Props> = (props) => {
     }
   }, [animationStatus]);
 
+  const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // Prevent trigger pointerLockControls
+    event.stopPropagation();
+  };
+
   return (
     <Styled.Container
       className={clsx(props.isShow && 'open')}
-      // onClick={onClick}
+      onClick={onClick}
     >
       <SlideShowList ref={listRef}>
         {dataList.map((data, index) => (
