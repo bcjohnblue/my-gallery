@@ -10,12 +10,13 @@ import { initRotationMatrices } from './PointerLockControlsHelper';
 const velocity = new THREE.Vector3();
 const SPEED = 4;
 const DAMPING_FACTOR = 0.75;
+const COLLISION_DETECTION_DISTANCE = 3;
 let lastTime = 0;
 
 const PointerLockControlsImpl: React.FC = () => {
   const { camera, clock, scene } = useThree();
+
   const controlRef = useRef<PointerLockControls>(null);
-  const [move, setMove] = useMoveControls();
 
   const setControl = useSetRecoilState(controlState);
   useEffect(() => {
@@ -23,6 +24,7 @@ const PointerLockControlsImpl: React.FC = () => {
     setControl(controlRef.current);
   }, [controlRef, setControl]);
 
+  const [move, setMove] = useMoveControls();
   useFrame(() => {
     // const delta = clock.getDelta();
     if (!controlRef.current?.isLocked) return;
@@ -46,7 +48,10 @@ const PointerLockControlsImpl: React.FC = () => {
           cameraDirectionClone,
         );
         const intersects = rayCaster.intersectObject(scene, true);
-        if (intersects.length > 0 && intersects[0].distance < 3) {
+        if (
+          intersects.length > 0 &&
+          intersects[0].distance < COLLISION_DETECTION_DISTANCE
+        ) {
           // console.log(rotationMatrix.direction, intersects[0].distance);
           setMove({
             direction: rotationMatrix.direction,
