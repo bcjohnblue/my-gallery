@@ -1,4 +1,5 @@
 import DaDaTong_Home_Top from '@/assets/img/dadatong/home_top.png';
+import DaDaTong_Solution_Detail from '@/assets/img/dadatong/solution_detail.png';
 import DaDaTong_SEO from '@/assets/img/dadatong/SEO.png';
 import DaDaTong_Announcement from '@/assets/img/dadatong/announcement.png';
 import { Data } from './SlideShowTypes';
@@ -7,6 +8,14 @@ const dataList: Data[] = [
   {
     type: 'normal',
     src: DaDaTong_Home_Top,
+    title: 'DaDaTong Website',
+    list: [
+      `I am reponsible for refactoring and developing the website of DaDaTong from November 2019 to December 2020. The next few slides show the features that I implemented last year.`,
+    ],
+  },
+  {
+    type: 'normal',
+    src: DaDaTong_Solution_Detail,
     title: 'Refactoring the Website',
     list: [
       `1. Refactor the old DaDaTong from <code>JSP (JavaServer Page)</code> to <code>React.js</code>.`,
@@ -19,7 +28,7 @@ const dataList: Data[] = [
     title: 'Search Engine Optimization (SEO)',
     list: [
       `1. By using <code>Google Analytics (GA)</code> <code>Google Tag Manager (GTM)</code> <code>A/B Test</code> to optimize the SEO.`,
-      `2. The impression is increased significantly after the new DaDaTong launched on April 2020.`,
+      `2. The impression was increased significantly after the new DaDaTong launched on April 2020.`,
     ],
   },
   {
