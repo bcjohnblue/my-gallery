@@ -1,10 +1,4 @@
-import React, { useEffect, useMemo, useRef } from 'react';
-import { MeshProps, useLoader, useThree } from 'react-three-fiber';
-import * as THREE from 'three';
-import { Mesh, Vector3 } from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { useGLTF, useTexture } from '@react-three/drei';
-import GLTF from '@/components/GLTF/Index';
+import React from 'react';
 
 const COLOR = 0xcccccc;
 
@@ -54,22 +48,12 @@ const RightWall: React.FC = () => {
 };
 
 const Walls: React.FC = () => {
-  // const { camera } = useThree();
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     camera.lookAt(new Vector3(0, 10, -2));
-  //     camera.updateProjectionMatrix();
-  //     console.log(camera);
-  //   }, 2000);
-  // }, [camera]);
-
   return (
     <>
       <FrontWall />
       <BackWall />
       <LeftWall />
       <RightWall />
-      {/* <GLTF /> */}
     </>
   );
 };

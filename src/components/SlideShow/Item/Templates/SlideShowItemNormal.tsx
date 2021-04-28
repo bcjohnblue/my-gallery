@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React from 'react';
 import { NormalData } from '../../SlideShowTypes';
 import Styled from './SlideShowItemTemplatesStyled';
 

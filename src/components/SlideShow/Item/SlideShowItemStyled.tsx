@@ -2,8 +2,6 @@ import styled from 'styled-components';
 
 const Styled = {
   SlideItem: styled.li`
-    /* width: 35vw;
-    height: 30vh; */
     width: 660px;
     height: 560px;
     position: absolute;
@@ -11,7 +9,6 @@ const Styled = {
     left: 50%;
     margin: -280px 0 0 -330px;
     visibility: hidden;
-    /* transition: transform 5s; */
 
     &::after {
       content: '';
@@ -43,9 +40,6 @@ const Styled = {
       border: 50px solid #fff;
       overflow: hidden;
       padding-top: 20px;
-      /* display: flex;
-      flex-direction: column;
-      justify-content: center; */
 
       & figcaption {
         color: #47a3da;
@@ -72,7 +66,6 @@ const Styled = {
       & img {
         display: block;
         width: 100%;
-        /* height: 320px; */
       }
     }
   `,

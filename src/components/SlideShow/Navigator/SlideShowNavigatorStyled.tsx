@@ -5,7 +5,6 @@ const CommonDiv = styled.div`
   z-index: 1000;
   color: #59656c;
   text-align: center;
-  /* padding: 223px 3%; */
   cursor: pointer;
   font-size: 2.2em;
   top: 50%;
@@ -24,9 +23,6 @@ const Styled = {
   Left: styled(CommonDiv)``,
   Right: styled(CommonDiv)`
     right: 0;
-    & svg {
-      /* margin-right: 30px; */
-    }
   `,
   Close: styled.div`
     position: fixed;
@@ -39,6 +35,7 @@ const Styled = {
     padding: 0.5em 1em;
     svg {
       width: 20px;
+      fill: #fff;
     }
   `,
 };

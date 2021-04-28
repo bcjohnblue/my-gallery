@@ -1,8 +1,7 @@
 import React, { Suspense } from 'react';
-import { MeshProps } from 'react-three-fiber';
-import * as THREE from 'three';
 import Walls from './Walls/Walls';
 import Poster from './Poster/Poster';
+import Ground from './Ground/Ground';
 
 type Props = {
   setIsSlideShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -12,14 +11,11 @@ const Building: React.FC<Props> = (props) => {
   return (
     <>
       <Suspense fallback={null}>
+        <Ground />
         <Walls />
         <Poster setIsSlideShow={props.setIsSlideShow} />
       </Suspense>
     </>
-    // <mesh {...props}>
-    //   <boxGeometry args={[0.1, 10, 40]} />
-    //   <meshBasicMaterial color={0xcccccc} />
-    // </mesh>
   );
 };
 

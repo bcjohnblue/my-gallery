@@ -1,24 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import usePointerLockValue from '@/hooks/usePointerLockValue';
 import Styled from './LandingPageStyled';
 
 const LandingPage: React.FC = () => {
   const [isShow, setIsShow] = useState(true);
 
+  const isPointerLock = usePointerLockValue();
   useEffect(() => {
-    const onPointerlockchange = () => {
-      const isPointerLock = document.pointerLockElement;
-      setIsShow(!isPointerLock);
-    };
-
-    document.addEventListener('pointerlockchange', onPointerlockchange, false);
-    return () => {
-      document.addEventListener(
-        'pointerlockchange',
-        onPointerlockchange,
-        false,
-      );
-    };
-  }, []);
+    setIsShow(!isPointerLock);
+  }, [isPointerLock]);
 
   if (!isShow) return null;
   return (

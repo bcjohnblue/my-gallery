@@ -1,11 +1,9 @@
-import React, { Suspense } from 'react';
+import React from 'react';
 import { Canvas } from '@react-three/fiber';
 import { Props as CanvasProps } from '@react-three/fiber/dist/declarations/src/web/Canvas';
-import { Physics } from '@react-three/cannon';
 import styled from 'styled-components';
 import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from 'recoil';
 
-import Ground from './Ground/Ground';
 import Scene from './Scene/Scene';
 import Building from './Building/Building';
 import Lights from './Lights/Lights';
@@ -20,6 +18,7 @@ const Styled = {
     width: 100vw;
     height: 100vh;
   `,
+  NormalElement: styled.div``,
 };
 
 type Props = {
@@ -37,18 +36,13 @@ export default ((props) => {
     dpr: devicePixelRatio,
     camera: {
       fov: 60,
-      // aspect: window.innerWidth / window.innerHeight,
-      // near: 1,
-      // far: 1000,
+      aspect: window.innerWidth / window.innerHeight,
+      near: 1,
+      far: 1000,
       position: [-5, 2, 5],
-      // lookAt: () => {
-      //   return new Vector3(0, 2, -3);
-      // },
-      // position: [-3, 3, -3],
     },
     onCreated: ({ camera }) => {
       camera.lookAt(-1, 2, -3);
-      // console.log(camera);
     },
   };
 
@@ -56,20 +50,17 @@ export default ((props) => {
     <Styled.Container>
       <Canvas {...canvasProps}>
         <RecoilBridge>
-          <Lights />
+          <Controls />
           <Scene>
-            <Controls />
+            <Lights />
             <Building setIsSlideShow={props.setIsSlideShow} />
-            <Physics>
-              <Suspense fallback={null}>
-                <Ground />
-              </Suspense>
-            </Physics>
           </Scene>
         </RecoilBridge>
       </Canvas>
-      <Loading />
-      <MouseIcon />
+      <Styled.NormalElement>
+        <Loading />
+        <MouseIcon />
+      </Styled.NormalElement>
     </Styled.Container>
   );
 }) as React.FC<Props>;

@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { useThree, MeshProps } from 'react-three-fiber';
 import { useRecoilValue } from 'recoil';
 import { controlState } from '@/store/atoms';
-import Circle from '@/components/Gallery/Circle/Circle';
+import CircleMarker from '@/components/Gallery/CircleMarker/CircleMarker';
 import { getInterSectObject } from '@/helpers';
 
 type Props = {
@@ -64,7 +64,7 @@ const Poster: React.FC<Props> = (props) => {
           </group>
         </mesh>
       </group>
-      <Circle ref={circleRef} position={[0, 0, -1.5]} />
+      <CircleMarker ref={circleRef} position={[0, 0, -1.5]} />
     </>
   );
 };
