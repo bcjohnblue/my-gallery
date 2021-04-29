@@ -1,12 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useMemo } from 'react';
 import { Plane, Text, useTexture } from '@react-three/drei';
 import DDT_HOME_IMAGE from '@/assets/ddt_home.png';
 import * as THREE from 'three';
-import { useThree, MeshProps } from 'react-three-fiber';
+import { useThree, MeshProps, useLoader } from 'react-three-fiber';
 import { useRecoilValue } from 'recoil';
 import { controlState } from '@/store/atoms';
 import CircleMarker from '@/components/Gallery/CircleMarker/CircleMarker';
 import { getInterSectObject } from '@/helpers';
+
+import fontPath from '@/assets/fonts/font.woff';
+import fontBlob from '@/assets/fonts/bold.blob';
+import fontJson from '@/assets/fonts/helvetiker_regular.typeface.json';
 
 type Props = {
   setIsSlideShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,6 +18,31 @@ type Props = {
 
 const Poster: React.FC<Props> = (props) => {
   const { camera } = useThree();
+
+  const font = new THREE.FontLoader().parse(fontJson);
+
+  // const font = useRef<THREE.Font>(new THREE.FontLoader().parse(fontJson));
+  // useEffect(() => {
+  //   font.current = new THREE.FontLoader().parse(fontJson);
+  // }, []);
+  // const font = useLoader<THREE.Font, string>(
+  //   THREE.FontLoader,
+  //   fontJson,
+  // );
+  const fontConfig = useMemo(
+    () => ({
+      font,
+      size: 0.2,
+      height: 0.2,
+      // curveSegments: 32,
+      // bevelEnabled: true,
+      // bevelThickness: 6,
+      // bevelSize: 2.5,
+      // bevelOffset: 0,
+      // bevelSegments: 8,
+    }),
+    [font],
+  );
 
   const control = useRecoilValue(controlState);
   const ddtHomeImg = useTexture(DDT_HOME_IMAGE);
@@ -51,8 +80,13 @@ const Poster: React.FC<Props> = (props) => {
           <Plane args={[4.8, 3, 1]}>
             <meshBasicMaterial map={ddtHomeImg} />
           </Plane>
-          <group position={[0, 1.85, 0]}>
-            <Text
+          <group position={[-0.6, 1.65, 0]}>
+            <mesh>
+              <textGeometry args={['DaDaTong', fontConfig]} />
+              <meshNormalMaterial />
+            </mesh>
+            {/* <Text
+              font={font}
               color="#0000A0" // default
               anchorX="center" // default
               anchorY="top" // default
@@ -60,7 +94,7 @@ const Poster: React.FC<Props> = (props) => {
               letterSpacing={0.2}
             >
               DaDaTong
-            </Text>
+            </Text> */}
           </group>
         </mesh>
       </group>
