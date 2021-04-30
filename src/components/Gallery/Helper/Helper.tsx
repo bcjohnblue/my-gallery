@@ -2,6 +2,7 @@ import React from 'react';
 import { Stats } from '@react-three/drei';
 
 const Helper: React.FC = () => {
+  return null;
   if (process.env.NODE_ENV !== 'development') return null;
 
   return (
