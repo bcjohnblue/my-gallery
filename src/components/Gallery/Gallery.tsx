@@ -4,6 +4,7 @@ import { Props as CanvasProps } from '@react-three/fiber/dist/declarations/src/w
 import styled from 'styled-components';
 import { useRecoilBridgeAcrossReactRoots_UNSTABLE } from 'recoil';
 
+import Helper from './Helper/Helper';
 import Scene from './Scene/Scene';
 import Building from './Building/Building';
 import Lights from './Lights/Lights';
@@ -56,6 +57,7 @@ export default ((props) => {
             <Building setIsSlideShow={props.setIsSlideShow} />
           </Scene>
         </RecoilBridge>
+        <Helper />
       </Canvas>
       <Styled.NormalElement>
         <Loading />
