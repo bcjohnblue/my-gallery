@@ -1,6 +1,6 @@
 {
-  "homepage": "https://bcjohnblue.github.io/My-Gallery/",
-  "name": "my-gallery",
+  "homepage": "https://bcjohnblue.github.io/my-gallery/",
+  "name": "bcjohn-gallery",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
