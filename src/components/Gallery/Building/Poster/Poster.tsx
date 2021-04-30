@@ -1,16 +1,15 @@
 import React, { useEffect, useRef, useMemo } from 'react';
-import { Plane, Text, useTexture } from '@react-three/drei';
+import { Plane, useTexture } from '@react-three/drei';
 import DDT_HOME_IMAGE from '@/assets/ddt_home.png';
 import * as THREE from 'three';
-import { useThree, MeshProps, useLoader } from 'react-three-fiber';
+import { useThree, MeshProps } from 'react-three-fiber';
 import { useRecoilValue } from 'recoil';
 import { controlState } from '@/store/atoms';
 import CircleMarker from '@/components/Gallery/CircleMarker/CircleMarker';
 import { getInterSectObject } from '@/helpers';
+import fontJson from '@/assets/fonts/Gobold Bold_Regular.json';
 
-import fontPath from '@/assets/fonts/font.woff';
-import fontBlob from '@/assets/fonts/bold.blob';
-import fontJson from '@/assets/fonts/helvetiker_regular.typeface.json';
+const font = new THREE.FontLoader().parse(fontJson);
 
 type Props = {
   setIsSlideShow: React.Dispatch<React.SetStateAction<boolean>>;
@@ -19,29 +18,13 @@ type Props = {
 const Poster: React.FC<Props> = (props) => {
   const { camera } = useThree();
 
-  const font = new THREE.FontLoader().parse(fontJson);
-
-  // const font = useRef<THREE.Font>(new THREE.FontLoader().parse(fontJson));
-  // useEffect(() => {
-  //   font.current = new THREE.FontLoader().parse(fontJson);
-  // }, []);
-  // const font = useLoader<THREE.Font, string>(
-  //   THREE.FontLoader,
-  //   fontJson,
-  // );
   const fontConfig = useMemo(
     () => ({
       font,
       size: 0.2,
-      height: 0.2,
-      // curveSegments: 32,
-      // bevelEnabled: true,
-      // bevelThickness: 6,
-      // bevelSize: 2.5,
-      // bevelOffset: 0,
-      // bevelSegments: 8,
+      height: 0,
     }),
-    [font],
+    [],
   );
 
   const control = useRecoilValue(controlState);
