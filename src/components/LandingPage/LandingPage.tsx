@@ -18,6 +18,8 @@ const LandingPage: React.FC = () => {
       Move: WASD
       <br />
       Look: MOUSE
+      <br />
+      Return: ESC
     </Styled.Container>
   );
 };
